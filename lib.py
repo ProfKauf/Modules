@@ -22,13 +22,13 @@ import warnings
 import itertools
 warnings.filterwarnings("ignore")
 import importlib
-import random
 from datetime import datetime
 '''Plots'''
 import matplotlib.ticker as mtick
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d as mp3d
 import seaborn as sns
+from mlxtend.plotting import plot_decision_regions
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.pyplot import figure
 from matplotlib.colors import ListedColormap
