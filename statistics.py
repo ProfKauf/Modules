@@ -7,8 +7,11 @@
 """
 statistics
 ----------
-Version 1.0
+Version 1.1
 -------------------
+*Added randomlist to tools
+*Added fit_transform to onehot encoder
+*Corrected description of partial correlation
 """
 
 
@@ -26,6 +29,12 @@ Class tools
 -----------
 '''
 class tools:
+    def rlist(length,ulimit,llimit=1):
+        randomlist = []
+        for i in range(0,length):
+            n = random.randint(1,ulimit)
+            randomlist.append(n)
+        return randomlist
     def stars(number):
         if number<0.0001:
             return '****'
@@ -238,6 +247,21 @@ class dataprep:
         def transform(self, X, y=None,sparse=False):
             X_c=X.copy()
             ar_encoded=self.preprocessor.transform(X_c)
+            names=self.preprocessor.get_feature_names_out(list(X_c.columns))
+            X_encoded = pd.DataFrame(ar_encoded, columns=names)
+            remainders = [s for s in list(X_encoded.columns) if "remainder" in s]
+            rename_dic=dict()
+            for r in remainders:
+                rename_dic[r]=r.split('__')[1]
+            X_encoded.rename(columns=rename_dic,inplace=True)
+
+            if sparse is False:
+                return X_encoded
+            else:
+                return ar_encoded
+        def fit_transform(self, X, y=None,sparse=False):
+            X_c=X.copy()
+            ar_encoded=self.preprocessor.fit_transform(X_c)
             names=self.preprocessor.get_feature_names_out(list(X_c.columns))
             X_encoded = pd.DataFrame(ar_encoded, columns=names)
             remainders = [s for s in list(X_encoded.columns) if "remainder" in s]
@@ -930,7 +954,7 @@ class plots:
         #scatter
         fig = plt.figure(figsize=(fig[0], fig[1])) 
         #ax = Axes3D(fig, azim=-115, elev=15)
-        ax=fig.gca(projection='3d')
+        ax=fig.add_subplot(projection='3d')
         ax.scatter(X[X.columns[0]],X[X.columns[1]],y, color='white', alpha=1.0, facecolor=dotclr,s=dotsize) 
         ax.tick_params(axis='both', which='major', labelsize=ticksize)
         ax.tick_params(axis='both', which='minor', labelsize=ticksize)
@@ -1549,7 +1573,7 @@ class tests:
             results.insert(0, "covar", [covar])
             results.insert(0, "var2", [var2])
             results.insert(0, "var1", [var1])
-            results.index=['Pairwise Test of Correlation'.format(method)]
+            results.index=['{} Partial Correation Test'.format(method)]
 
             return results
 
