@@ -7,11 +7,18 @@
 """
 statistics
 ----------
-Version 1.1
+Version 1.2
 -------------------
 *Added randomlist to tools
 *Added fit_transform to onehot encoder
 *Corrected description of partial correlation
+*Fixed the following bugs:
+    -scatter3d
+    -class describe.data
+    -scatterplot
+    -correlation matrix
+    -regression
+    
 """
 
 
@@ -364,7 +371,7 @@ class describe:
     class data:
         def __init__(self,data,ordinal=[],nominal=[]):
             self.non_num=set(ordinal).union(set(nominal))
-            self.num=set(list(data.columns))-self.non_num
+            self.num=list(set(list(data.columns))-self.non_num)
             self.data=data
             self.ordinal=ordinal
             self.nominal=nominal
@@ -476,8 +483,14 @@ class describe:
             self.per=percent
             self.nom=show_nominal
             self.stars=stars
+            #check for numerics
+            ##ordinal
+            if len(data[ordinal].select_dtypes(include=np.number).columns.tolist())!=len(data[ordinal].columns):
+                return print('Some of your ordinal variable have not been converted to numbers yet!')
+            else:
+                pass
             #preliminaries
-            cm=data.corr()
+            cm=data.corr(numeric_only=True)
             cols=data.columns
             numerical=list(set(list(cols))-set(ordinal)-set(nominal))
             if ordvsnom is None:
@@ -889,12 +902,11 @@ class plots:
             aux=pd.DataFrame(pairs.value_counts())
             aux['v1']=[aux.index[i][0] for i in range(0,len(aux))]
             aux['v2']=[aux.index[i][1] for i in range(0,len(aux))]
-            aux['counts']=aux[0]
             if hue!=None:
-                hue='counts'
+                hue='count'
             else:
                 pass
-            g=sns.scatterplot(data=aux, x='v1', y='v2',size='counts', hue=hue,legend=legend,sizes=bubsize,c=dotclr,palette=hueclr,
+            g=sns.scatterplot(data=aux, x='v1', y='v2',size='count', hue=hue,legend=legend,sizes=bubsize,c=dotclr,palette=hueclr,
                              hue_norm=hue_norm)    
         plt.xlabel(namexy[0], fontsize = labelsize,rotation=rotx) # x-axis label with fontsize 15
         plt.ylabel(namexy[1], fontsize = labelsize,rotation=roty) # y-axis label with fontsize 15
@@ -1761,7 +1773,7 @@ class regression:
        else:
            pass
        #Fit the Model
-       model=mdic[regression](y,X).fit()
+       model=mdic[regression](y.to_numpy(),X.to_numpy()).fit()
        #summary
        summary=model.summary()
        #get residuals
