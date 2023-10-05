@@ -69,7 +69,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 #from imblearn.pipeline import Pipeline as Pipeline_imb
 from category_encoders.ordinal import OrdinalEncoder as ordenc
 '''Classifiers'''
-#from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.linear_model import LinearRegression, LogisticRegression
 #from sklearn.svm import SVC
 #from sklearn.neighbors import KNeighborsClassifier, LocalOutlierFactor
 #from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
