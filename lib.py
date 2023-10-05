@@ -64,9 +64,9 @@ from sklearn.feature_extraction.text import _VectorizerMixin
 from sklearn.feature_selection._base import SelectorMixin
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_extraction.text import CountVectorizer
-from imblearn.under_sampling import RandomUnderSampler
-from imblearn.over_sampling import SMOTE
-from imblearn.pipeline import Pipeline as Pipeline_imb
+#from imblearn.under_sampling import RandomUnderSampler
+#from imblearn.over_sampling import SMOTE
+#from imblearn.pipeline import Pipeline as Pipeline_imb
 from category_encoders.ordinal import OrdinalEncoder as ordenc
 '''Classifiers'''
 from sklearn.linear_model import LinearRegression, LogisticRegression
