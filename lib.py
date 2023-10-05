@@ -51,13 +51,13 @@ from scipy.special import stdtr
 from scikit_posthocs import outliers_tietjen
 from yellowbrick.regressor import CooksDistance
 '''Experimentals'''
-from sklearn.experimental import enable_halving_search_cv, enable_iterative_imputer
+#from sklearn.experimental import enable_halving_search_cv, enable_iterative_imputer
 '''Preprocessing'''
-from sklearn import model_selection, preprocessing, feature_selection, ensemble, linear_model, metrics, decomposition, tree
+#from sklearn import model_selection, preprocessing, feature_selection, ensemble, linear_model, metrics, decomposition, tree
 from sklearn.preprocessing import StandardScaler,MinMaxScaler,MaxAbsScaler,RobustScaler, OneHotEncoder
-from sklearn.impute import IterativeImputer
+#from sklearn.impute import IterativeImputer
 from sklearn.utils import resample
-from sklearn.impute import SimpleImputer
+#from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import _VectorizerMixin
@@ -69,17 +69,17 @@ from sklearn.feature_extraction.text import CountVectorizer
 #from imblearn.pipeline import Pipeline as Pipeline_imb
 from category_encoders.ordinal import OrdinalEncoder as ordenc
 '''Classifiers'''
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.svm import SVC
-from sklearn.neighbors import KNeighborsClassifier, LocalOutlierFactor
-from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier, IsolationForest, ExtraTreesRegressor, RandomForestRegressor
-from sklearn.model_selection import train_test_split, KFold, StratifiedKFold, cross_val_score, cross_val_predict, GridSearchCV, cross_validate, RandomizedSearchCV, HalvingGridSearchCV
-from sklearn import metrics
-from sklearn.metrics import confusion_matrix, make_scorer, jaccard_score, balanced_accuracy_score, accuracy_score, f1_score,precision_score,recall_score
+#from sklearn.linear_model import LinearRegression, LogisticRegression
+#from sklearn.svm import SVC
+#from sklearn.neighbors import KNeighborsClassifier, LocalOutlierFactor
+#from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+#from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier, IsolationForest, ExtraTreesRegressor, RandomForestRegressor
+#from sklearn.model_selection import train_test_split, KFold, StratifiedKFold, cross_val_score, cross_val_predict, GridSearchCV, cross_validate, RandomizedSearchCV, HalvingGridSearchCV
+#from sklearn import metrics
+#from sklearn.metrics import confusion_matrix, make_scorer, jaccard_score, balanced_accuracy_score, accuracy_score, f1_score,precision_score,recall_score
 '''Hyperparameter Tuning'''
-from skopt.space import Real, Categorical, Integer
-from skopt import BayesSearchCV
+#from skopt.space import Real, Categorical, Integer
+#from skopt import BayesSearchCV
 
 
 # In[ ]:
