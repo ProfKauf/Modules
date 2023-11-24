@@ -7,7 +7,7 @@
 """
 statistics
 ----------
-Version 1.2
+Version 1.3
 -------------------
 *Added randomlist to tools
 *Added fit_transform to onehot encoder
@@ -18,6 +18,7 @@ Version 1.2
     -scatterplot
     -correlation matrix
     -regression
+*Fixed variable name bug in regression class
     
 """
 
