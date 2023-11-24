@@ -1773,7 +1773,7 @@ class regression:
        else:
            pass
        #Fit the Model
-       model=mdic[regression](y.to_numpy(),X.to_numpy()).fit()
+       model=mdic[regression](y,X).fit()
        #summary
        summary=model.summary()
        #get residuals
@@ -1857,7 +1857,7 @@ class regression:
            vif = 'There is only 1 independent variable. I cannot compute vifs.'
        ass=pd.DataFrame()
        if regression=='linear':
-           jb,bp,dw,rr=stats.jarque_bera(residuals),sm.stats.diagnostic.het_breuschpagan(residuals,X), sm.stats.stattools.durbin_watson(residuals), sm.stats.diagnostic.linear_reset(model)
+           jb,bp,dw,rr=stats.jarque_bera(residuals),sm.stats.diagnostic.het_breuschpagan(residuals,X), sm.stats.stattools.durbin_watson(residuals), statsmodels.stats.outliers_influence.reset_ramsey(model)
            ass['test']=['Jarque-Bera','Breusch-Pagan','Durbin-Watson','Ramsey RESET']
            ass['statistic']=[jb[0],bp[0],dw,rr.statistic]
            ass['p-val']=[jb[1],bp[1],1,rr.pvalue]
