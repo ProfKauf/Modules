@@ -7,7 +7,7 @@
 """
 statistics
 ----------
-Version 1.3
+Version 1.4
 -------------------
 *Added randomlist to tools
 *Added fit_transform to onehot encoder
@@ -19,6 +19,7 @@ Version 1.3
     -correlation matrix
     -regression
 *Fixed variable name bug in regression class
+*Fixed object bug in onehot class
     
 """
 
@@ -262,6 +263,8 @@ class dataprep:
             for r in remainders:
                 rename_dic[r]=r.split('__')[1]
             X_encoded.rename(columns=rename_dic,inplace=True)
+            for c in list(X_encoded.columns):
+                X_encoded[c]=pd.to_numeric(X_encoded[c], errors='ignore')
 
             if sparse is False:
                 return X_encoded
@@ -277,12 +280,14 @@ class dataprep:
             for r in remainders:
                 rename_dic[r]=r.split('__')[1]
             X_encoded.rename(columns=rename_dic,inplace=True)
+            for c in list(X_encoded.columns):
+                X_encoded[c]=pd.to_numeric(X_encoded[c], errors='ignore')
 
             if sparse is False:
                 return X_encoded
             else:
                 return ar_encoded
-
+            
     class encoder:
         def __init__(self,cols=None,order=None):
             if order is not None:
