@@ -7,7 +7,7 @@
 """
 statistics
 ----------
-Version 1.4
+Version 1.5
 -------------------
 *Added randomlist to tools
 *Added fit_transform to onehot encoder
@@ -20,6 +20,9 @@ Version 1.4
     -regression
 *Fixed variable name bug in regression class
 *Fixed object bug in onehot class
+*Fixed the following bugs of regression class:
+    - changed 'regression' argument to 'method'
+    - Logistic Regression now accepts already encoded data (if in unit interval)
     
 """
 
@@ -1742,7 +1745,7 @@ arguments
 ---------
 - X = matrix of independent variables (pd.DataFrame)
 - y = dependent variable (pd.Series)
-- regression = type of regression ('linear','logistic','multinomial','ordinal') (str) [default = 'linear']
+- method = type of regression ('linear','logistic','multinomial','ordinal') (str) [default = 'linear']
 - var = name of the variable in the dataframe (str)
 returns
 -------
@@ -1756,7 +1759,7 @@ returns
 '''
 
 class regression:
-   def __init__(self,X,y,regression='linear'):
+   def __init__(self,X,y,method='linear'):
        # method dictionary
        mdic={'linear':sm.OLS,'logistic':sm.Logit,'multinomial':sm.MNLogit,'ordinal':OrderedModel}
        namey=y.name
@@ -1768,23 +1771,32 @@ class regression:
        y=df['y']
        X=df.drop('y',axis=1)
        #Add constant
-       if regression in ['linear','logistic','multinomial']:
+       if method in ['linear','logistic','multinomial']:
            X=sm.add_constant(X)
            X=X.rename(columns={'const': 'intercept'})
        else:
            pass
-       #Format Dependent Logistic
-       if regression=='logistic':
-           y=encoder.fit_transform(y,sparse=True)
+       #Check and Format Dependent Variable Logistic Regression
+       if method=='logistic':
+           if len(list(y.unique()))!=2:
+               print('The dependent variable is non-binary.')
+           else:
+               if np.issubdtype(y.dtype, np.number) is False:
+                   y=encoder.fit_transform(y,sparse=True)
+               else:
+                   if 1 in list(y.unique()) and 0 in list(y.unique()) is False:
+                       y=encoder.fit_transform(y,sparse=True)
+                   else:
+                       pass  
        else:
            pass
        #Fit the Model
-       model=mdic[regression](y,X).fit()
+       model=mdic[method](y,X).fit()
        #summary
        summary=model.summary()
        #get residuals
        ypred=model.predict(X)
-       if regression in ['linear','logistic']:
+       if method in ['linear','logistic']:
            residuals=y-ypred
        else:
            y_str=y.astype(str)
@@ -1807,7 +1819,7 @@ class regression:
        fit['dv']=[namey]
        fit['dof resid']=[dfn]
        fit['dof model']=[dfk]
-       if regression=='linear':
+       if method=='linear':
            fit['R2']=[model.rsquared]
            fit['adj. R2']=[model.rsquared_adj]
            fit['omnibus (F)']=[model.fvalue]
@@ -1818,24 +1830,24 @@ class regression:
            fit['LL']=[model.llf]
            fit['LLR']=[model.llr]
            fit['LLR (p-val)']=[model.llr_pvalue]
-       fit.index=[regression+' reg.'+' fit']
+       fit.index=[method+' reg.'+' fit']
 
        #results (coefficients)
        results=table2.copy()
-       if regression in ['linear','logistic','ordinal']:
-           results.index=[regression+' reg.']+['coefficients']+['']*(len(results)-2)
+       if method in ['linear','logistic','ordinal']:
+           results.index=[method+' reg.']+['coefficients']+['']*(len(results)-2)
            results=results.rename(columns={"index": ""})
-           if regression=='linear':
+           if method=='linear':
                scaler=StandardScaler()
                coef=results[['coef']]
                coef=list(scaler.fit_transform(coef).reshape(1,-1)[0])
                results.insert(2, 'stand. coef', coef)
-           elif regression=='logistic':
+           elif method=='logistic':
                exp=[math.exp(x) for x in results['coef']]
                results.insert(2, 'exp(coef)', exp)
            else:
                pass
-       elif regression=='multinomial':
+       elif method=='multinomial':
            name0=list(results.columns)[0]
            names=[name0]+list(results[name0])
            names_ninter=[i for i in names if i!='intercept']
@@ -1844,12 +1856,12 @@ class regression:
            results=results[~results[name0].str.contains('=')] 
            results=results.rename(columns={name0: ""})
            results.insert(0,'category',category)
-           results.index=[regression+' reg.']+['coefficients']+['']*(len(results)-2)
+           results.index=[method+' reg.']+['coefficients']+['']*(len(results)-2)
        else:
            pass
        #assumptions
        l=len(list(X.columns))
-       if regression!='ordinal':
+       if method!='ordinal':
            l1=l-1
        else:
            l1=l
@@ -1862,14 +1874,14 @@ class regression:
        else:
            vif = 'There is only 1 independent variable. I cannot compute vifs.'
        ass=pd.DataFrame()
-       if regression=='linear':
+       if method=='linear':
            jb,bp,dw,rr=stats.jarque_bera(residuals),sm.stats.diagnostic.het_breuschpagan(residuals,X), sm.stats.stattools.durbin_watson(residuals), statsmodels.stats.outliers_influence.reset_ramsey(model)
            ass['test']=['Jarque-Bera','Breusch-Pagan','Durbin-Watson','Ramsey RESET']
            ass['statistic']=[jb[0],bp[0],dw,rr.statistic]
            ass['p-val']=[jb[1],bp[1],1,rr.pvalue]
            ass=ass.round(4)
            ass=ass.replace({'p-val':{1:''}})
-           ass.index=[regression+' reg.']+['assumptions']+['','']
+           ass.index=[method+' reg.']+['assumptions']+['','']
        else:
            ass = 'No assumption check implemented for this regression type yet'
            
