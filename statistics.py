@@ -23,7 +23,7 @@ Version 1.5
 *Fixed the following bugs of regression class:
     - changed 'regression' argument to 'method'
     - Logistic Regression now accepts already encoded data (if in unit interval)
-    
+*OneHot Encoding: Removed verbose_feature_names
 """
 
 
@@ -253,7 +253,7 @@ class dataprep:
         def __init__(self,cats=[],drop='first'):
             encoder=OneHotEncoder(drop=drop,sparse=True)
             self.preprocessor = ColumnTransformer(
-            transformers=[("dummy", encoder, cats)],remainder='passthrough')
+            transformers=[("dummy", encoder, cats)],remainder='passthrough',verbose_feature_names_out=False)
         def fit(self, X, y=None):
             return self.preprocessor.fit(X)
         def transform(self, X, y=None,sparse=False):
