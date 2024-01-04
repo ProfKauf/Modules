@@ -7,7 +7,7 @@
 """
 statistics
 ----------
-Version 1.5
+Version 1.6
 -------------------
 *Added randomlist to tools
 *Added fit_transform to onehot encoder
@@ -24,13 +24,25 @@ Version 1.5
     - changed 'regression' argument to 'method'
     - Logistic Regression now accepts already encoded data (if in unit interval)
 *OneHot Encoding: Removed verbose_feature_names
+*Inserted Flexibel Path to Libraries
 """
 
 
 # In[ ]:
 
 
-from lib import *
+#function to find path
+import os
+def find_path(name, path=os.path.expanduser('~')):
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            return root
+#import relevant libraries
+path_lib=find_path('momeda_lib.py')
+import sys
+sys.path.append(path_lib)
+import momeda_lib
+from momeda_lib import *
 
 
 # In[ ]:
