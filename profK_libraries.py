@@ -1,30 +1,44 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# In[ ]:
+
+
+#!/usr/bin/env python
+# coding: utf-8
+
+
 # In[1]:
 
+# 
+# <br>
+# lib<br>
+# ---<br>
+# Version 1.0<br>
+# -------------------<br>
+# 
 
-"""
-lib
----
-Version 1.0
--------------------
-"""
+# 
+# Basics
+# <br>
+# import dill<br>
+# import os<br>
+# import pickle<br>
+# import numpy as np<br>
+# import math<br>
+# import pandas as pd <br>
+# import warnings<br>
+# import itertools<br>
+# warnings.filterwarnings("ignore")<br>
+# import importlib<br>
+# import random<br>
+# from datetime import datetime<br>
+# lots
+# 
 
-'''Basics'''
-import dill
-import os
-import pickle
-import numpy as np
-import math
-import pandas as pd 
-import warnings
-import itertools
-warnings.filterwarnings("ignore")
-import importlib
-import random
-from datetime import datetime
-'''Plots'''
+# In[ ]:
+
+
 import matplotlib.ticker as mtick
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d as mp3d
@@ -83,7 +97,3 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 
 
 # In[ ]:
-
-
-
-
