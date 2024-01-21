@@ -5,3 +5,4 @@ pingouin
 scikit-optimize
 scikit-posthocs
 yellowbrick
+httpimport
