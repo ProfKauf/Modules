@@ -53,7 +53,8 @@ __github__ = 'https://github.com/ProfKauf/Modules/'
 
 
 import httpimport
-with httpimport.remote_repo('https://gist.github.com/ProfKauf/e0cb67590e7721e05c845cb596dfe617/raw'):
+url='https://raw.githubusercontent.com/ProfKauf/Modules/main/'
+with httpimport.remote_repo(url):
     import profK_libraries
 from profK_libraries import *
 
