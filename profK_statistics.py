@@ -1340,27 +1340,32 @@ class tests:
             results['p-val']=[p]
             results.index=['Sign Test']
             return results
-        def mwu(data,var,groupvar,alternative='two-sided'):
+        def mwu(data,var,groupvar,alternative='two-sided',decimal=4):
             #preliminaries
             l=len(data[groupvar].unique())
             if l!=2:
                 return print('There are more or less than 2 samples!')
             else:
-                groups=dataprep.group_sep(data,groupvar)
-                namegroups=[list(groups[0][groupvar].unique())[0],list(groups[1][groupvar].unique())[0]]
-            #statistics
-            ns=[len(g) for g in groups]
-            medians=[g[var].median() for g in groups]
-            U1=stats.mannwhitneyu(groups[0][var],groups[1][var]).statistic
-            U2=ns[0]*ns[1]-U1
+                data2=data.copy()
+                data2['ranks']=data2[var].rank()
+                groups=list(data[groupvar].unique())
+                rank_data=[data2[data2[groupvar]==g]['ranks'] for g in groups]
+                pgtest=pg.mwu(data[data[groupvar]==groups[0]][var],data[data[groupvar]==groups[1]][var],alternative=alternative)
             #table
-            results=pg.mwu(groups[0][var],groups[1][var],alternative=alternative)
-            results.insert(0, "median", ['{}'.format(medians[0])+'/'+'{}'.format(medians[1])])
-            results.insert(0, "n", ['{}'.format(ns[0])+'/'+'{}'.format(ns[1])])
-            results.insert(0, "groups", ['{}'.format(namegroups[0])+'/'+'{}'.format(namegroups[1])])
-            results.insert(0, "var", [var])
-            results.index=['Mannâ€“Whitney U test']
+            results=pd.DataFrame()
+            results[groupvar]=groups
+            results['n']=[len(rank_data[i]) for i in range(2)]
+            results['mean ranks']=[round(rank_data[i].mean(),4) for i in range(2)]
+            results['sum of ranks']=[int(rank_data[i].sum()) for i in range(2)]
+            results['U-val']=[round(pgtest['U-val'][0],decimal),'']
+            results['alternative']=[alternative,'']
+            results['p-val']=[round(pgtest['p-val'][0],decimal),'']
+            results['RBC']=[round(pgtest['RBC'][0],decimal),'']
+            results['CLES']=[round(pgtest['CLES'][0],decimal),'']
+
+            results.index=['Mann-Whitney',' U test']
             return results
+
         def wilcoxon(var1,var2,data=None,alternative='two-sided'):
             #preliminaries
             if data is None:
