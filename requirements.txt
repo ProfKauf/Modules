@@ -10,7 +10,7 @@ ipython==8.12.3
 joblib==1.5.1
 kiwisolver==1.4.8
 matplotlib==3.7.1
-numpy<2
+numpy==2.0
 pandas==2.3.1
 pandas_flavor==0.7.0
 patsy==1.0.1
