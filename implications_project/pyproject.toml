@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "empirical-implications"
+version = "0.1.0"
+description = "Compute quasi-implications with Wilson confidence intervals and support from a pandas DataFrame."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Till Florian Kauffeldt", email = "florian.kauffeldt@hs-heilbronn.de" }
+]
+dependencies = [
+  "pandas>=2.0",
+  "scipy>=1.10"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0",
+  "ruff>=0.4",
+  "black>=24.0",
+  "mypy>=1.6",
+  "pandas-stubs>=2.0"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
